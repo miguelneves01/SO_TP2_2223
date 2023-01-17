@@ -3,14 +3,10 @@ import java.util.*;
 public class Backpack {
 
     private HashMap<Integer,Item> items;
-    private int maxCapacity;
-
-    private int valueToFind;
 
 
-    public Backpack(int maxCapacity,int valueToFind) {
-        this.maxCapacity = maxCapacity;
-        this.valueToFind = valueToFind;
+
+    public Backpack() {
         this.items = new HashMap<>();
     }
 
@@ -34,41 +30,53 @@ public class Backpack {
         return items;
     }
 
-    public int size() {
-        return items.size();
-    }
-
-    public Item get(Object key) {
-        return items.get(key);
-    }
-
     public void put(Integer key, Item value) {
-
-            items.put(key, value);
-
+        items.put(key, value);
     }
 
-    public Item remove(Object key) {
-        return items.remove(key);
+    public void remove(Integer key) {
+        items.remove(key);
     }
 
-    public int getMaxCapacity() {
-        return maxCapacity;
+    public void init(List<Item> items, int maxCapacity){
+        for (int i = 0; i < items.size() &&
+                (this.getTotalWeight() + items.get(i).getWeight() <= maxCapacity); i++) {
+            this.put(i, items.get(i));
+        }
     }
 
-    public Backpack clone(){
-        Backpack bp = new Backpack(this.maxCapacity, this.valueToFind);
-        bp.getItems().putAll(this.getItems());
+    public static Backpack clone(Backpack backpack){
+        Backpack bp = new Backpack();
+        bp.getItems().putAll(backpack.getItems());
         return bp;
     }
+
+    public static ArrayList<Backpack> generateChildren(List<Backpack> backpacks, Manager manager, int lastIndex) {
+        ArrayList<Backpack> children = new ArrayList<>();
+        for (Backpack backpack : backpacks) {
+            // remove last inserted item
+            Backpack child = Backpack.clone(backpack);
+            child.remove(lastIndex);
+            // add items after the removed item
+            for (int i = lastIndex + 1; i < manager.getSortedItems().size(); i++) {
+
+                if (child.getTotalWeight() + manager.getSortedItems().get(i).getWeight() <= manager.getMaxWeight()) {
+                    Backpack newChild = Backpack.clone(child);
+                    newChild.put(i, manager.getSortedItems().get(i));
+                    children.add(newChild);
+                }
+            }
+        }
+        return children;
+    }
+
+
 
     @Override
     public String toString() {
         return "Backpack{" +
                 "items=" + items.keySet() +
-                ", maxCapacity=" + maxCapacity +
                 ", totalWeight=" + getTotalWeight() +
-                ", valueToFind=" + valueToFind +
                 ", totalValue=" + getTotalValue() +
                 '}';
     }

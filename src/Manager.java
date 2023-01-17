@@ -1,12 +1,15 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Manager {
 
     private List<Item> items;
+    private List<Item> sortedItems;
     private int itemAmount;
     private int maxValue;
     private int maxWeight;
@@ -35,6 +38,9 @@ public class Manager {
         } catch (FileNotFoundException e){
             e.printStackTrace();
         }
+
+        Comparator<Item> itemComparator = Comparator.comparing(o -> o.getRatio());
+        sortedItems = items.stream().sorted(itemComparator.reversed()).collect(Collectors.toList());
     }
 
     public int getItemAmount() {
@@ -52,5 +58,9 @@ public class Manager {
 
     public List<Item> getItems() {
         return items;
+    }
+
+    public List<Item> getSortedItems() {
+        return sortedItems;
     }
 }
