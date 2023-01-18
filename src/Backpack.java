@@ -4,8 +4,6 @@ public class Backpack {
 
     private HashMap<Integer,Item> items;
 
-
-
     public Backpack() {
         this.items = new HashMap<>();
     }
@@ -51,25 +49,58 @@ public class Backpack {
         return bp;
     }
 
+
+
+    // Este método deve estar junto ao método que implementa o Beam Search
+    // Usar sempre a mesma lista porque eficiencia
+    // Tentar implementar codigo do getChilds da foto
+    // level - proximo indice a inserir
+
+    /*
+    public static void generateChildren(List<Backpack> listSol, Manager manager, int level) {
+        if (level == manager.getItemAmount())
+            listSol.clear();
+        else {
+            ArrayList<Backpack> newchildren = new ArrayList<>();
+            for (Backpack listSol : backpacks) {
+                // remove last inserted item
+
+                child.remove(lastIndex);
+                // add items after the removed item
+                for (int i = 0; i < manag.getSortedItems().size(); i++) {
+
+                    if (child.getTotalWeight() + manager.getSortedItems().get(i).getWeight() <= manager.getMaxWeight()) {
+                        Backpack newChild = Backpack.clone(child);
+                        newChild.put(i, manager.getSortedItems().get(i));
+                        newchildren.add(newChild);
+                    }
+                }
+            }
+        }
+    }
+     */
+
+
+    /*
     public static ArrayList<Backpack> generateChildren(List<Backpack> backpacks, Manager manager, int lastIndex) {
-        ArrayList<Backpack> children = new ArrayList<>();
+        ArrayList<Backpack> newchildren = new ArrayList<>();
         for (Backpack backpack : backpacks) {
             // remove last inserted item
-            Backpack child = Backpack.clone(backpack);
+
             child.remove(lastIndex);
             // add items after the removed item
-            for (int i = lastIndex + 1; i < manager.getSortedItems().size(); i++) {
+            for (int i = 0; i < manag.getSortedItems().size(); i++) {
 
                 if (child.getTotalWeight() + manager.getSortedItems().get(i).getWeight() <= manager.getMaxWeight()) {
                     Backpack newChild = Backpack.clone(child);
                     newChild.put(i, manager.getSortedItems().get(i));
-                    children.add(newChild);
+                    newchildren.add(newChild);
                 }
             }
         }
-        return children;
+        return newchildren;
     }
-
+    */
 
 
     @Override

@@ -9,55 +9,56 @@ public class Main {
 
         Backpack lb = new Backpack();
         lb.init(manager.getSortedItems(), manager.getMaxWeight());
+        int alfa = manager.getItemAmount() / 2;
 
+        // Beem Search
         ArrayList<Backpack> solutions = new ArrayList<>();
-        solutions.add(lb);
+        Backpack initSol = new Backpack();
+        solutions.add(initSol);
+        int level = 0;
+        while (solutions.size() != 0) {
 
-        while (solutions != null) {
+            //int lastIndex = Collections.max(lb.getItems().keySet());
+//            ArrayList<Backpack> children = Backpack.generateChildren(solutions, manager,lastIndex);
+            Backpack.generateChildren(solutions, manager,level);
 
-            int lastIndex = Collections.max(lb.getItems().keySet());
-            ArrayList<Backpack> children = Backpack.generateChildren(solutions, manager,lastIndex);
             //System.out.println(children);
             ArrayList<Backpack> childrenToRemove = new ArrayList<>();
-            for(Backpack bp : children){
-                int ub = upperBound(bp,manager,lastIndex);
+            for(Backpack bp : solutions){
+                int ub = upperBound(bp,manager,level);
                 System.out.println(ub);
                 if (ub >= lb.getTotalValue()){
                     System.out.println("potential");
                     System.out.println(bp);
                     if (bp.getTotalValue() >  lb.getTotalValue()){
                         System.out.println("new best");
-                        lb = bp;
+                       // lb = bp.clone();
                     }
                 } else {
                     System.out.println("removing child");
                     childrenToRemove.add(bp);
                 }
             }
-            children.removeAll(childrenToRemove);
-            solutions = selectSolutions(children.size()/2,children);
+            solutions.removeAll(childrenToRemove);
+            selectSolutions(alfa,solutions);
             //System.out.println(solutions);
-
-
         //System.out.println(children);
-
         }
 
 
         //System.out.println(lb);
     }
 
-    private static ArrayList<Backpack> selectSolutions(int size,ArrayList<Backpack> children) {
-        ArrayList<Backpack> solution = new ArrayList<>();
+    private static void selectSolutions(int alfa,ArrayList<Backpack> children) {
         Random random = new Random();
-        for (int j = 0; j < size; j++) {
+        int bpToRemove = children.size() - alfa;
+
+        for (int j = 0; j < bpToRemove; j++) {
             int rand = random.nextInt(children.size());
-            Backpack child = children.remove(rand);
-            solution.add(child);
+            children.remove(rand);
             //System.out.println(children.get(rand));
             //System.out.println(solution);
         }
-        return solution;
     }
 
     private static int upperBound(Backpack bp, Manager manager, int lastIndex) {
